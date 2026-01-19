@@ -3,7 +3,6 @@
 from datetime import datetime
 from pydantic import model_validator
 from sqlmodel import Field
-
 from backend.data.base_model import BaseSQLModel
 from backend.data.enums import CommandStatus
 
@@ -15,7 +14,6 @@ class MainCommand(BaseSQLModel, table=True):
 
     List of commands: https://docs.google.com/spreadsheets/d/1XWXgp3--NHZ4XlxOyBYPS-M_LOU_ai-I6TcvotKhR1s/edit?gid=564815068#gid=564815068
     """
-
     id: int | None = Field(
         default=None, primary_key=True
     )  # NOTE: Must be None for autoincrement
@@ -25,6 +23,7 @@ class MainCommand(BaseSQLModel, table=True):
     data_size: int
     total_size: int
 
+
     @model_validator(mode="after")
     def validate_params_format(self):
         """
@@ -32,7 +31,19 @@ class MainCommand(BaseSQLModel, table=True):
         In either of these cases return self. Otherwise raise a ValueError.
         The format of the comma seperated values is "data1,data2" so no spaces between data and the commas.
         """
+        params_=self.params 
+        format_=self.format 
+
         # TODO: (Member) Implement this method
+        if params_ is None and format_ is None:
+            return self
+        
+        if (params_ is None or format_ is None):
+            raise ValueError("Params and format must mutally contain 'None'")
+        
+        if len(params_.split(',')) != len(format_.split(',')):
+            raise ValueError("Params and format must mutally contain the same number of values")
+        
         return self
 
 
