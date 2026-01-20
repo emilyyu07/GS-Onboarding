@@ -4,13 +4,15 @@ import { API_URL } from "../environment";
 
 export const getCommands = async (): Promise<CommandListResponse> => {
   try {
-    const { data } = await axios.get<CommandListResponse>(`${API_URL}/commands/`)
+    const { data } = await axios.get<CommandListResponse>(
+      `${API_URL}/commands/`,
+    );
     return data;
   } catch (error) {
     console.error(`Error getting commands: ${error}`);
-    throw error
+    throw error;
   }
-}
+};
 
 /**
  * TODO: (Member) Create a deleteCommand API function based on the following specs. You should be using axios to make the API call
@@ -20,3 +22,16 @@ export const getCommands = async (): Promise<CommandListResponse> => {
  * @param id: command to delete
  * @returns Promise<CommandListResponse>: list of commands after the command with the given id was deleted
  */
+export const deleteCommand = async (
+  id: number,
+): Promise<CommandListResponse> => {
+  try {
+    const { data } = await axios.delete<CommandListResponse>(
+      `${API_URL}/commands/${id}`,
+    );
+    return data;
+  } catch (err) {
+    console.error(`Failed to delete command: ${err}`);
+    throw err;
+  }
+};
